@@ -7,6 +7,7 @@
     <title>Lynow Worlds · Mundial 2026</title>
     <link rel="icon" href="/insignia.png" />
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/editorial.css" />
     <script defer src="/insights.js"></script>
     <script defer src="/app.js"></script>
   </head>
@@ -31,25 +32,27 @@
         >
       </div>
     </header>
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="shell hero-inner"><div class="hero-copy">
-        <small>LEAGUE OF LEGENDS <b>/</b> CAMPEONATO MUNDIAL</small>
-        <h1 id="hero-title">WORLDS <i>2026</i></h1>
-        <div class="hero-links"><a href="#partidas">Explorar partidas <span>↓</span></a><a href="#recordes">Ver recordes ↗</a></div>
-      </div><div id="highlights"></div></div>
-    </section>
-    <main class="shell">
-      <div class="intro" id="partidas">
-        <h2>Central de partidas</h2>
-        <div class="sync">
-          <button id="refresh">↻ Atualizar</button
-          ><span id="sync" role="status"></span>
-        </div>
+    <main class="shell" id="partidas">
+      <div class="edition">
+        <div><small>LEAGUE OF LEGENDS · CAMPEONATO MUNDIAL</small>
+        <h1>Worlds <em>2026</em></h1></div>
+        <div class="sync"><button id="refresh">↻ Atualizar</button><span id="sync" role="status"></span></div>
+      </div>
+      <div class="feature">
+          <section class="match" aria-label="Série selecionada">
+            <div class="matchtop">
+              <small id="stage">SÉRIE SELECIONADA</small
+              ><span id="status"></span>
+            </div>
+            <div id="score" class="score">Carregando série…</div>
+            <div id="matchdate" class="matchdate"></div>
+          </section>
+        <div id="highlights"></div>
       </div>
       <div class="layout">
         <section class="card agenda">
           <div class="heading">
-            <h2>Séries</h2>
+            <h2>Agenda</h2>
             <span class="count" id="count">—</span>
           </div>
           <label class="sr" for="filter">Filtrar séries</label
@@ -62,17 +65,10 @@
           <div id="events" aria-live="polite">Carregando agenda…</div>
         </section>
         <div class="detail">
-          <section class="match" aria-label="Série selecionada">
-            <div class="matchtop">
-              <small id="stage">SÉRIE SELECIONADA</small
-              ><span id="status"></span>
-            </div>
-            <div id="score" class="score">Carregando série…</div>
-            <div id="matchdate" class="matchdate"></div>
-          </section>
+
           <section class="card">
             <div class="heading">
-              <h2>Análise do mapa</h2>
+              <h2>Central da partida</h2>
               <span class="count" id="sample"></span>
             </div>
             <div class="maps" id="maps"></div>

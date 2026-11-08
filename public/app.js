@@ -132,7 +132,7 @@ function list() {
           e.teams
             .map(
               (t) =>
-                '<span class="row"><span>' +
+                '<span class="row"><span class="agenda-team">' + (/^https:\/\//.test(t.image || "") ? '<img src="'+esc(t.image)+'" loading="lazy" alt="">' : '') +
                 esc(t.code || t.name || "A definir") +
                 "</span><span>" +
                 esc(fmt(t.wins)) +
@@ -173,7 +173,7 @@ function renderScore(e) {
     team(e.teams[0]) +
     '<div class="scoreline">' +
     esc(fmt(e.teams[0]?.wins)) +
-    " × " +
+    ' <span class="score-separator">:</span> ' +
     esc(fmt(e.teams[1]?.wins)) +
     "</div>" +
     team(e.teams[1]);
@@ -214,11 +214,13 @@ function chart(history) {
         (50 - (45 * p.diff) / max).toFixed(1),
     )
     .join(" ");
-  return (
-    '<h3>Diferença de ouro</h3><svg class="chart" viewBox="0 0 600 100" preserveAspectRatio="none" role="img" aria-label="Diferença de ouro por amostra, positiva para o lado azul"><line x1="0" y1="50" x2="600" y2="50"/><polyline fill="none" stroke="#ffd775" stroke-width="2" vector-effect="non-scaling-stroke" points="' +
-    points +
-    '"/><line id="gold-cursor" x1="600" x2="600" y1="0" y2="100" style="stroke:#ffdb97;stroke-width:2"/></svg><div class="gold-controls"><label for="gold-time">Percorrer o mapa</label><output id="gold-readout" for="gold-time">'+esc(goldCaption(values.length-1))+'</output><input id="gold-time" type="range" min="0" max="'+(values.length-1)+'" value="'+(values.length-1)+'"></div><small>Acima da linha: lado azul · Abaixo: lado vermelho</small>'
-  );
+  const grid = [5,27.5,50,72.5,95].map(y=>'<line x1="0" x2="600" y1="'+y+'" y2="'+y+'"/>').join("");
+  const timeLabel = i => typeof values[i].time==="number" ? (i===values.length-1?"Fim":values[i].time+" min") : new Date(values[i].time).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:"America/Sao_Paulo"});
+  return '<section class="economy"><div class="economy-title"><h3>Vantagem de ouro</h3><output id="gold-readout" for="gold-time">'+esc(goldCaption(values.length-1))+'</output></div>'+
+    '<div class="plot"><div class="y-axis"><span>+'+fmt(max)+'</span><span>0</span><span>−'+fmt(max)+'</span></div><svg class="chart" viewBox="0 0 600 100" preserveAspectRatio="none" role="img" aria-label="Vantagem de ouro do lado azul sobre o vermelho">'+
+    '<defs><linearGradient id="gold-ink" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="0" y2="100"><stop offset="50%" stop-color="#2859d8"/><stop offset="50%" stop-color="#aa3e53"/></linearGradient></defs>'+grid+
+    '<polygon points="0,50 '+points+' 600,50" fill="url(#gold-ink)" opacity=".18"/><polyline fill="none" stroke="url(#gold-ink)" stroke-width="2.5" vector-effect="non-scaling-stroke" points="'+points+'"/><line id="gold-cursor" x1="600" x2="600" y1="0" y2="100"/></svg></div>'+
+    '<div class="x-axis">'+[0,.25,.5,.75,1].map(f=>'<span>'+esc(timeLabel(Math.round(f*(values.length-1))))+'</span>').join("")+'</div><div class="gold-controls"><label for="gold-time">Percorrer o mapa</label><input id="gold-time" type="range" min="0" max="'+(values.length-1)+'" value="'+(values.length-1)+'"></div></section>';
 }
 function renderBans(data, team, index) {
   const side = index === 0 ? "blue" : "red";
@@ -276,8 +278,6 @@ function renderGame(data) {
     return;
   }
   spotlight(teams);
-  html += insights(teams);
-  html += lineups(teams);
   html +=
     '<div class="metrics">' +
     metric(
@@ -293,6 +293,8 @@ function renderGame(data) {
     metric("Maior vantagem observada", fmt(peak?.amount), peak?.team || "") +
     "</div>" +
     chart(data.history);
+  html += insights(teams);
+  html += lineups(teams);
   teams.forEach((t, i) => {
     html +=
       '<h3 class="side' +
