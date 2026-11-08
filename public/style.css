@@ -475,3 +475,69 @@ nav a:hover {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Championship broadcast identity */
+:root { --bg:#0a1016; --card:#111a22; --line:#2a3640; --gold:#ffcf78; --muted:#aab8c2; }
+body { background:linear-gradient(150deg,#15212c 0,#0a1016 45rem); }
+header { background:#0a1118; }
+.shell { width:min(1380px,94%); }
+.mast { height:60px; }
+.hero { position:relative; isolation:isolate; overflow:hidden; background:#1b2329; border-bottom:1px solid #967946; }
+.hero::before { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg,#0a131cf7 4%,#10161bc9 37%,#10182028 70%),url("/media/art/shurima.webp") center 38% / cover; }
+.hero-inner { min-height:clamp(220px,21vw,320px); display:flex; align-items:center; }
+.hero-copy { padding:28px 0; }
+.hero small { font-size:.72rem; letter-spacing:.19em; color:#f1dcac; }
+.hero h1 { margin:12px 0 18px; font:italic 950 clamp(3rem,6.8vw,7rem)/.91 "Arial Black","Segoe UI",sans-serif; letter-spacing:-.075em; }
+.hero h1 i { color:#ffd589; }
+.hero-links { display:flex; align-items:center; gap:22px; font-size:.88rem; font-weight:650; }
+.hero-links a:first-child { padding:10px 15px; background:#ffcf78; color:#211a11; border-radius:3px; }
+.hero-links span { margin-left:16px; }
+.intro { padding:24px 0 15px; }
+.intro h2 { font-size:clamp(1.65rem,3vw,2.65rem); line-height:1; }
+.sync { display:flex; align-items:center; gap:12px; }
+.card,.match { border-radius:9px; }
+@media(min-width:761px){.layout{grid-template-columns:minmax(220px,.64fr) minmax(0,2fr)}}
+.agenda { background:#101820; }
+.agenda .event { padding:12px; border-radius:3px; }
+.agenda .selected { background:linear-gradient(100deg,#66512b62,#282e32); border-color:#8b7449; border-left:3px solid var(--gold); }
+.match { background:radial-gradient(ellipse at 0% 110%,#246678 0,transparent 50%),radial-gradient(ellipse at 100% 110%,#6d3548 0,transparent 54%),#151d29; }
+.matchtop,.matchdate,.score { position:relative; z-index:2; }
+.matchtop small,.matchtop .badge { background:#111a22ec; border-radius:3px; padding:4px 8px; }
+.score { width:60%; margin:auto; min-height:140px; gap:8px; }
+.scoreline { font-variant-numeric:tabular-nums; font-size:clamp(1.6rem,3.6vw,3.6rem); font-weight:850; }
+.star { position:absolute; bottom:0; width:24%; height:90%; margin:0; pointer-events:none; }
+.star-0 {left:0}.star-1 {right:0}
+.star img {width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 12px #080d1388)}
+.star figcaption {position:absolute; bottom:0; left:0; right:0; padding:18px 4px 7px; text-align:center; color:white; background:linear-gradient(transparent,#101820ed);font-weight:800;font-size:.79rem}
+.draft h3 {margin:0;font-size:1.1rem}.draft-label {display:flex;align-items:center;gap:6px;color:#dce6eb;font-size:.76rem;font-weight:700;margin:10px 0 5px;}
+.dot {width:8px;height:8px;display:inline-block;transform:rotate(45deg)}.side-dot-0{background:#7ce4ef}.side-dot-1{background:#ff96ac}
+.picks {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;}
+.pick {position:relative;isolation:isolate;overflow:hidden;height:clamp(80px,8.6vw,138px);background:#23303b;border-radius:4px;}
+.pick img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 26%;z-index:-2;transition:transform .2s;}
+.pick:hover img {transform:scale(1.05)}
+.pick:after {content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(transparent 23%,#091018dc 93%);}
+.pick div {position:absolute;bottom:6px;left:7px;right:3px;}
+.pick small,.pick strong{display:block;line-height:1.15;overflow-wrap:anywhere}.pick small{font:500 .69rem/1.3 "Segoe UI",sans-serif;color:#d4dce1;letter-spacing:0}
+.pick strong{font-size:clamp(.74rem,1.1vw,1.04rem)}
+.draft {margin-bottom:20px}
+.metric {background:#19242e;border-color:#35424d}
+#records {grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.record-tile {position:relative;overflow:hidden;background:linear-gradient(125deg,#17232e,#273848);border:1px solid var(--line);border-radius:6px}
+.record-tile img {position:absolute;right:0;bottom:0;height:96%;width:45%;object-fit:contain;object-position:right bottom;}
+.record-tile .metric {position:relative;background:linear-gradient(90deg,#192530 45%,transparent 80%);border:0;min-height:108px;padding:17px;}
+.record-tile strong {font-size:1.85rem;line-height:1.25;color:#ffdb97}
+.player-id{display:flex;align-items:center;gap:9px}.player-id img{width:39px;height:43px;object-fit:cover;object-position:top;border-radius:4px;background:#293845}
+#analysis>p>a{color:var(--gold)}
+@media(max-width:760px){.hero-inner{min-height:188px}.hero::before{background-position:center,62% 33%}.intro{align-items:center}.sync{display:grid;gap:3px}.agenda #events{max-height:140px}.score{width:64%;min-height:128px}.team img{width:32px;height:32px}.star{width:21%;height:74%}.star figcaption{font-size:.65rem}.pick{height:90px}.pick div{left:4px}.pick small{font-size:.6rem}#records{grid-template-columns:repeat(2,minmax(0,1fr))}.hero small{letter-spacing:.09em}.intro #sync{font-size:.57rem}.record-tile .metric{padding:10px}.team span{font-size:.65rem}}
+@media(prefers-reduced-motion:reduce){.pick img{transition:none}}
+.pick{text-align:left;padding:0;border:1px solid #344451;}
+.pick:focus-visible{outline-offset:0}
+#player-sheet{padding:0;width:min(490px,92vw);overflow:hidden;color:#f8f8fa;background:#131e28;border:1px solid #67717a;border-radius:10px;}
+#player-sheet::backdrop{background:#070b10cc;backdrop-filter:blur(3px)}
+#player-sheet form{position:absolute;top:8px;right:8px;z-index:2}#player-sheet form button{font-size:1.45rem;padding:0 9px;background:#111b25}
+.sheet-hero{position:relative;isolation:isolate;overflow:hidden;height:235px;display:flex;align-items:end;padding:20px;}
+.sheet-art{position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%;opacity:.44}
+.sheet-photo{position:absolute;z-index:-1;right:0;bottom:0;height:95%;width:56%;object-fit:contain;object-position:bottom}
+.sheet-hero div{background:linear-gradient(90deg,#0c131ce6,transparent);padding:8px 16px 8px 0}
+.sheet-hero h2{font-size:2.2rem;line-height:1.05}.sheet-hero strong{color:var(--gold)}
+.sheet-stats{padding:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}

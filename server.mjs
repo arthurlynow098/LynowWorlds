@@ -10,7 +10,7 @@ import * as live from './provider.mjs';
 import { archivedEvent, archivedGame, officialRecords } from './official.mjs';
 
 const cache = createCache(process.env.VERCEL ? join(tmpdir(), 'lynow-worlds') : fileURLToPath(new URL('./.cache/', import.meta.url)));
-const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon' };
+const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.ico': 'image/x-icon', '.json':'application/json' };
 
 async function agenda() {
   try {

@@ -18,6 +18,8 @@ Abra [localhost:3000](http://localhost:3000). O servidor usa a biblioteca padrã
 
 ![Central de partidas com série, mapas e curva de ouro](assets/painel.png)
 
+O draft é interativo. Clique na arte de um campeão para abrir a ficha do jogador naquele mapa, com foto, KDA, dano, ouro e CS. O catálogo desta edição reúne 96 retratos dos elencos do LoL Esports e as artes dos 103 campeões escolhidos. As imagens otimizadas em WebP acompanham o projeto e os endereços de origem estão em [public/media/catalog.json](public/media/catalog.json).
+
 ## Explorar o Mundial
 
 1. Filtre as séries por estado. O placar principal mostra os **mapas vencidos na série**, com horário de Brasília e formato do confronto.

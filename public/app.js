@@ -1,5 +1,33 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
+let catalog = {players:{}, champions:{}};
+let currentTeams = [];
+function portrait(name) { return catalog.players[name?.trim()]?.src; }
+function championArt(name) { return catalog.champions[name]?.src; }
+function championName(id) {
+  const names = {MonkeyKing:"Wukong", JarvanIV:"Jarvan IV", KSante:"K’Sante", Kaisa:"Kai’Sa", KogMaw:"Kog’Maw", Chogath:"Cho’Gath", Velkoz:"Vel’Koz", Leblanc:"LeBlanc", Renata:"Renata Glasc"};
+  return names[id] || id?.replace(/([a-z])([A-Z])/g,"$1 $2") || "A definir";
+}
+function lineups(teams) {
+  return '<section class="draft"><h3>Draft do mapa</h3>' + teams.map((team,side) =>
+    '<div class="draft-label"><i class="dot side-dot-' + side + '"></i>' + esc(team.name) + '</div><div class="picks">' +
+    team.players.map((p,index) => {
+      const art = championArt(p.champion);
+      return '<button class="pick" data-side="'+side+'" data-player="'+index+'" aria-label="Abrir ficha de '+esc(p.name)+' com '+esc(p.champion)+'">' + (art ? '<img src="'+esc(art)+'" alt="" loading="lazy">' : '') +
+        '<div><strong>'+esc(championName(p.champion))+'</strong><small>'+esc(p.name?.trim() || '')+'</small></div></button>';
+    }).join('') + '</div>').join('')+'</section>';
+}
+function spotlight(teams) {
+  const selected = events.find(e => e.id === eventId);
+  if (!selected) return;
+  const match = document.querySelector(".match");
+  match.querySelectorAll(".star").forEach(el => el.remove());
+  selected.teams.forEach((team,side) => {
+    const roster = teams.find(t => t.players?.some(p => p.name?.startsWith(team.code+" ")))?.players || [];
+    const player = [roster.find(p=>p.role==="mid"),...roster].find(p=>p && portrait(p.name));
+    if (player) match.insertAdjacentHTML("beforeend",'<figure class="star star-'+side+'"><img src="'+esc(portrait(player.name))+'" alt="'+esc(player.name.trim())+'"><figcaption>'+esc(player.name.trim())+'</figcaption></figure>');
+  });
+}
 const esc = (value) =>
   String(value ?? "").replace(
     /[&<>"']/g,
@@ -113,6 +141,7 @@ function list() {
       .join("") || "Nenhuma série neste filtro.";
 }
 function renderScore(e) {
+  document.querySelectorAll(".match .star").forEach(el=>el.remove());
   const stage = stages[e?.stage] || e?.stage || "Série selecionada";
   $("stage").textContent = [
     stage.replaceAll("_", " ").toUpperCase(),
@@ -219,7 +248,7 @@ function playerRow(player) {
     ? `<small title="Parcela do dano da equipe">${esc(share)} do time</small>`
     : "";
   return `<tr>
-    <td>${esc(name || "—")}<small>${esc(champion || "Escolha pendente")}</small></td>
+    <td><div class="player-id">${portrait(name)?'<img loading="lazy" src="'+esc(portrait(name))+'" alt="">':''}<div>${esc(name || "—")}<small>${esc(champion || "Escolha pendente")}</small></div></div></td>
     <td>${esc(kda)}</td><td>${esc(fmt(gold))}</td><td>${esc(fmt(damage))}${damageCell}</td>
     <td>${esc(fmt(cs))}</td><td>${esc(fmt(wards))} / ${esc(fmt(wardsDestroyed))}</td>
   </tr>`;
@@ -227,12 +256,15 @@ function playerRow(player) {
 function renderGame(data) {
   const teams = data.teams || [],
     peak = data.peak;
+  currentTeams = teams;
   $("sample").textContent = data.timestamp ? when(data.timestamp) : "";
   let html = data.notice ? "<p>" + esc(data.notice) + "</p>" : "";
   if (!teams.length) {
     $("analysis").innerHTML = html + "Sem telemetria para este mapa.";
     return;
   }
+  spotlight(teams);
+  html += lineups(teams);
   html +=
     '<div class="metrics">' +
     metric(
@@ -338,7 +370,10 @@ async function records() {
     $("coverage").textContent = data.coverage || "";
     $("records").innerHTML =
       (data.records || [])
-        .map((r) => metric(r.label, fmt(r.value), r.name))
+        .map((r) => {
+          const photo=portrait(r.name);
+          return '<div class="record-tile">'+(photo?'<img loading="lazy" src="'+esc(photo)+'" alt="">':'')+metric(r.label,fmt(r.value),r.name)+'</div>';
+        })
         .join("") || "Nenhum recorde disponível para a cobertura atual.";
   } catch (err) {
     $("records").textContent = err.message;
@@ -387,13 +422,31 @@ $("maps").onclick = (e) => {
   const b = e.target.closest("[data-id]");
   if (b) openMap(b.dataset.id);
 };
+$("analysis").addEventListener("click", e => {
+  const pick = e.target.closest(".pick");
+  if (!pick) return;
+  const team = currentTeams[Number(pick.dataset.side)];
+  const player = team?.players[Number(pick.dataset.player)];
+  if (!player) return;
+  const photo = portrait(player.name), art = championArt(player.champion);
+  $("sheet-content").innerHTML = '<div class="sheet-hero">'+(art?'<img class="sheet-art" src="'+esc(art)+'" alt="">':'')+
+    (photo?'<img class="sheet-photo" src="'+esc(photo)+'" alt="'+esc(player.name)+'">':'')+
+    '<div><small>'+esc(team.name)+'</small><h2 id="sheet-name">'+esc(player.name.trim())+'</h2><strong>'+esc(championName(player.champion))+'</strong></div></div>'+
+    '<div class="sheet-stats">'+[["Abates",player.kills],["Mortes",player.deaths],["Assistências",player.assists],["Dano",player.damage],["Ouro",player.gold],["CS",player.cs]].map(([k,v])=>metric(k,fmt(v))).join('')+'</div>';
+  $("player-sheet").showModal();
+});
 $("filter").onchange = () => openEvent(visible()[0]?.id || "");
 $("refresh").onclick = () => {
   refresh();
   records();
 };
-refresh();
-records();
+async function start() {
+  try {
+    const response = await fetch("/media/catalog.json");
+    if (response.ok) catalog = await response.json();
+  } finally { refresh(); records(); }
+}
+start();
 setInterval(() => {
   if (!document.hidden && !$("refresh").disabled) {
     refresh();

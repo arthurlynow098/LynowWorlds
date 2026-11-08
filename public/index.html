@@ -30,18 +30,22 @@
         >
       </div>
     </header>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="shell hero-inner"><div class="hero-copy">
+        <small>LEAGUE OF LEGENDS <b>/</b> CAMPEONATO MUNDIAL</small>
+        <h1 id="hero-title">WORLDS <i>2026</i></h1>
+        <div class="hero-links"><a href="#partidas">Explorar partidas <span>↓</span></a><a href="#recordes">Ver recordes ↗</a></div>
+      </div></div>
+    </section>
     <main class="shell">
-      <div class="intro">
-        <div>
-          <small>LEAGUE OF LEGENDS <b>/</b> MUNDIAL 2026</small>
-          <h1>Central de partidas<span>.</span></h1>
-        </div>
+      <div class="intro" id="partidas">
+        <h2>Central de partidas</h2>
         <div class="sync">
           <button id="refresh">↻ Atualizar</button
           ><span id="sync" role="status"></span>
         </div>
       </div>
-      <div class="layout" id="partidas">
+      <div class="layout">
         <section class="card agenda">
           <div class="heading">
             <h2>Séries</h2>
@@ -83,6 +87,10 @@
         <div id="records">Carregando recordes…</div>
       </section>
     </main>
+    <dialog id="player-sheet" aria-labelledby="sheet-name">
+      <form method="dialog"><button autofocus aria-label="Fechar ficha">×</button></form>
+      <div id="sheet-content"></div>
+    </dialog>
     <footer class="shell">
       Lynow Worlds <span>Projeto independente · League of Legends Esports</span>
     </footer>
