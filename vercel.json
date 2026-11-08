@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "outputDirectory": "public",
+  "functions": {
+    "api/entry.mjs": { "includeFiles": "{schedule.json,data/**}", "maxDuration": 30 }
+  },
+  "rewrites": [
+    { "source": "/api/:route*", "destination": "/api/entry?route=:route*" }
+  ]
+}

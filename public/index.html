@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101118" />
+    <title>Lynow Worlds · Mundial 2026</title>
+    <link rel="icon" href="/insignia.png" />
+    <link rel="stylesheet" href="/style.css" />
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="shell mast">
+        <a class="brand" href="#partidas"
+          ><img class="brand-icon" src="/insignia.png" alt="" /> LYNOW<span
+            class="light"
+            >WORLDS</span
+          ></a
+        >
+        <nav aria-label="Principal">
+          <a href="#partidas">Partidas</a><a href="#recordes">Recordes</a>
+        </nav>
+        <a
+          class="season"
+          href="https://lolesports.com/pt-BR/leagues/worlds"
+          target="_blank"
+          rel="noopener"
+          >LoL Esports ↗</a
+        >
+      </div>
+    </header>
+    <main class="shell">
+      <div class="intro">
+        <div>
+          <small>LEAGUE OF LEGENDS <b>/</b> MUNDIAL 2026</small>
+          <h1>Central de partidas<span>.</span></h1>
+        </div>
+        <div class="sync">
+          <button id="refresh">↻ Atualizar</button
+          ><span id="sync" role="status"></span>
+        </div>
+      </div>
+      <div class="layout" id="partidas">
+        <section class="card agenda">
+          <div class="heading">
+            <h2>Séries</h2>
+            <span class="count" id="count">—</span>
+          </div>
+          <label class="sr" for="filter">Filtrar séries</label
+          ><select id="filter">
+            <option value="all">Todas as séries</option>
+            <option value="inProgress">Ao vivo</option>
+            <option value="completed">Encerradas</option>
+            <option value="unstarted">Agendadas</option>
+          </select>
+          <div id="events" aria-live="polite">Carregando agenda…</div>
+        </section>
+        <div class="detail">
+          <section class="match" aria-label="Série selecionada">
+            <div class="matchtop">
+              <small id="stage">SÉRIE SELECIONADA</small
+              ><span id="status"></span>
+            </div>
+            <div id="score" class="score">Carregando série…</div>
+            <div id="matchdate" class="matchdate"></div>
+          </section>
+          <section class="card">
+            <div class="heading">
+              <h2>Análise do mapa</h2>
+              <span class="count" id="sample"></span>
+            </div>
+            <div class="maps" id="maps"></div>
+            <div id="analysis" aria-live="polite">
+              Aguardando seleção de mapa.
+            </div>
+          </section>
+        </div>
+      </div>
+      <section class="card records" id="recordes">
+        <div class="heading"><h2>Recordes do Mundial</h2></div>
+        <p id="coverage"></p>
+        <div id="records">Carregando recordes…</div>
+      </section>
+    </main>
+    <footer class="shell">
+      Lynow Worlds <span>Projeto independente · League of Legends Esports</span>
+    </footer>
+  </body>
+</html>
