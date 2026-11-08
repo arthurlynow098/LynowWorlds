@@ -40,6 +40,14 @@ for file in sorted(raw.glob("*-fullstats.html")):
     if len(match) != 1: continue
     gid = match[0]
     extra = {"source":"https://gol.gg/game/stats/"+sourceid+"/page-fullstats/", "damage": [int(v) for v in rows["Total damage to Champion"]]}
+    fields = {"Vision Score":"vision", "DPM":"dpm", "GPM":"gpm", "Solo kills":"solo",
+              "Objectives Stolen":"steals", "Damage dealt to turrets":"turretDamage",
+              "Total damage taken":"taken", "Total Heals On Teammates":"heals",
+              "GD@15":"gold15", "CSD@15":"cs15", "XPD@15":"xp15"}
+    extra["advanced"] = {}
+    for label, field in fields.items():
+        if label in rows:
+            extra["advanced"][field] = [float(v) if re.fullmatch(r"[+-]?\d+(?:\.\d+)?", v) else None for v in rows[label]]
     overview = raw / (sourceid+"-game.html")
     if overview.exists():
         html = overview.read_text("utf8")

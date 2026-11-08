@@ -8,7 +8,11 @@ for (const [id, extra] of Object.entries(enriched)) {
   map.sourceUrl = extra.source;
   map.teams.forEach((team, side) => {
     team.bans = extra.bans?.[side];
-    team.players.forEach((player, pos) => { player.damage = extra.damage[5*side + pos]; });
+    team.players.forEach((player, pos) => {
+      const index = 5*side + pos;
+      player.damage = extra.damage[index];
+      for (const [field,values] of Object.entries(extra.advanced ?? {})) player[field] = values[index];
+    });
   });
   if (extra.gold?.length) {
     map.history = extra.gold.map((diff, minute) => ({time: minute, diff}));

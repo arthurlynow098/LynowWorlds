@@ -22,6 +22,10 @@ O draft é interativo. Clique na arte de um campeão para abrir a ficha do jogad
 
 ## Explorar o Mundial
 
+O **Raio-X do mapa** classifica os dez atletas por dano, dano por minuto, dano recebido, dano a torres, visão, cura em aliados, ouro por minuto, abates solo ou objetivos roubados. Em **Duelos aos 15 minutos**, selecione ouro, experiência ou CS para comparar as cinco posições. Cada diferença usa o lado azul como referência. A curva de ouro pode ser percorrida com o controle deslizante ou com as setas do teclado.
+
+O destaque no topo abre os melhores momentos da série selecionada. O catálogo inicial associa 45 confrontos a vídeos dos canais identificados no cartão. O player do YouTube é carregado ao clicar e oferece um link direto caso a incorporação seja restrita. Séries futuras podem receber novos vídeos em `public/media/highlights.json`, usando o ID da série.
+
 1. Filtre as séries por estado. O placar principal mostra os **mapas vencidos na série**, com horário de Brasília e formato do confronto.
 2. Selecione um mapa para consultar os campeões, abates, mortes, assistências, dano a campeões, CS, ouro e sentinelas de cada jogador. Compare torres, dragões, barões, inibidores e banimentos por equipe.
 3. Leia a curva de ouro a partir do lado azul. Acima de zero, o azul lidera. A maior vantagem considera o valor absoluto da diferença entre os times em cada amostra.

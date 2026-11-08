@@ -144,6 +144,7 @@ function list() {
       .join("") || "Nenhuma série neste filtro.";
 }
 function renderScore(e) {
+  showHighlight(e);
   document.querySelectorAll(".match .star").forEach(el=>el.remove());
   const stage = stages[e?.stage] || e?.stage || "Série selecionada";
   $("stage").textContent = [
@@ -193,8 +194,16 @@ function mapButtons() {
     )
     .join("");
 }
+let goldSamples = [];
+function goldCaption(index) {
+  const p=goldSamples[index];
+  const moment=typeof p.time==="number" ? (index===goldSamples.length-1?"Encerramento":"Minuto "+p.time) : when(p.time);
+  const leader=p.diff===0?"Ouro empatado":(currentTeams[p.diff>0?0:1]?.name || "")+" +"+fmt(Math.abs(p.diff))+" de ouro";
+  return moment+" · "+leader;
+}
 function chart(history) {
   const values = (history || []).filter((p) => Number.isFinite(p.diff));
+  goldSamples=values;
   if (values.length < 2) return "";
   const max = Math.max(1, ...values.map((p) => Math.abs(p.diff)));
   const points = values
@@ -208,7 +217,7 @@ function chart(history) {
   return (
     '<h3>Diferença de ouro</h3><svg class="chart" viewBox="0 0 600 100" preserveAspectRatio="none" role="img" aria-label="Diferença de ouro por amostra, positiva para o lado azul"><line x1="0" y1="50" x2="600" y2="50"/><polyline fill="none" stroke="#ffd775" stroke-width="2" vector-effect="non-scaling-stroke" points="' +
     points +
-    '"/></svg><small>Acima da linha: lado azul · Abaixo: lado vermelho · Amostras em ordem temporal</small>'
+    '"/><line id="gold-cursor" x1="600" x2="600" y1="0" y2="100" style="stroke:#ffdb97;stroke-width:2"/></svg><div class="gold-controls"><label for="gold-time">Percorrer o mapa</label><output id="gold-readout" for="gold-time">'+esc(goldCaption(values.length-1))+'</output><input id="gold-time" type="range" min="0" max="'+(values.length-1)+'" value="'+(values.length-1)+'"></div><small>Acima da linha: lado azul · Abaixo: lado vermelho</small>'
   );
 }
 function renderBans(data, team, index) {
@@ -267,6 +276,7 @@ function renderGame(data) {
     return;
   }
   spotlight(teams);
+  html += insights(teams);
   html += lineups(teams);
   html +=
     '<div class="metrics">' +
@@ -308,11 +318,16 @@ function renderGame(data) {
     html += '<p><a href="' + esc(data.sourceUrl) + '" target="_blank" rel="noreferrer">Ficha do mapa no Games of Legends ↗</a></p>';
   }
   $("analysis").innerHTML = html;
+  $("analysis").dataset.archivedMap = data.state === "finished" ? gameId : "";
 }
 async function openMap(id, quiet = false) {
   const ticket = ++epoch;
   gameId = id;
   mapButtons();
+  if (quiet && $("analysis").dataset.archivedMap === id && $("analysis").querySelector(".lab")) {
+    spotlight(currentTeams);
+    return;
+  }
   if (!quiet) {
     $("sample").textContent = "";
     $("analysis").textContent = "Buscando telemetria…";
@@ -452,12 +467,20 @@ $("analysis").addEventListener("click", e => {
     '<div class="sheet-stats">'+[["Abates",player.kills],["Mortes",player.deaths],["Assistências",player.assists],["Dano",player.damage],["Ouro",player.gold],["CS",player.cs]].map(([k,v])=>metric(k,fmt(v))).join('')+'</div>';
   $("player-sheet").showModal();
 });
+$("analysis").addEventListener("input",e=>{
+  if(e.target.id!=="gold-time")return;
+  const i=Number(e.target.value), x=600*i/(goldSamples.length-1);
+  $("gold-readout").textContent=goldCaption(i);
+  $("gold-cursor").setAttribute("x1",x);
+  $("gold-cursor").setAttribute("x2",x);
+});
 $("filter").onchange = () => openEvent(visible()[0]?.id || "");
 $("refresh").onclick = () => {
   refresh();
   records();
 };
 async function start() {
+  loadHighlights().then(()=>showHighlight(events.find(e=>e.id===eventId)));
   try {
     const response = await fetch("/media/catalog.json");
     if (response.ok) catalog = await response.json();

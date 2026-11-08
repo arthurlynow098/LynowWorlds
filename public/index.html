@@ -7,6 +7,7 @@
     <title>Lynow Worlds · Mundial 2026</title>
     <link rel="icon" href="/insignia.png" />
     <link rel="stylesheet" href="/style.css" />
+    <script defer src="/insights.js"></script>
     <script defer src="/app.js"></script>
   </head>
   <body>
@@ -35,7 +36,7 @@
         <small>LEAGUE OF LEGENDS <b>/</b> CAMPEONATO MUNDIAL</small>
         <h1 id="hero-title">WORLDS <i>2026</i></h1>
         <div class="hero-links"><a href="#partidas">Explorar partidas <span>↓</span></a><a href="#recordes">Ver recordes ↗</a></div>
-      </div></div>
+      </div><div id="highlights"></div></div>
     </section>
     <main class="shell">
       <div class="intro" id="partidas">
@@ -87,6 +88,7 @@
         <div id="records">Carregando recordes…</div>
       </section>
     </main>
+    <dialog id="cinema" aria-labelledby="cinema-title"><div class="cinema-heading"><h2 id="cinema-title">Melhores momentos</h2><form method="dialog"><button aria-label="Fechar vídeo">×</button></form></div><div id="cinema-screen"></div></dialog>
     <dialog id="player-sheet" aria-labelledby="sheet-name">
       <form method="dialog"><button autofocus aria-label="Fechar ficha">×</button></form>
       <div id="sheet-content"></div>
