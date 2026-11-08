@@ -25,7 +25,10 @@ function spotlight(teams) {
   selected.teams.forEach((team,side) => {
     const roster = teams.find(t => t.players?.some(p => p.name?.startsWith(team.code+" ")))?.players || [];
     const player = [roster.find(p=>p.role==="mid"),...roster].find(p=>p && portrait(p.name));
-    if (player) match.insertAdjacentHTML("beforeend",'<figure class="star star-'+side+'"><img src="'+esc(portrait(player.name))+'" alt="'+esc(player.name.trim())+'"><figcaption>'+esc(player.name.trim())+'</figcaption></figure>');
+    if (player) {
+      const profile = catalog.players[player.name.trim()];
+      match.insertAdjacentHTML("beforeend",'<figure class="star star-'+side+'"><img src="'+esc(profile.src)+'" alt="'+esc(player.name.trim())+'"><figcaption><small>'+esc(team.code)+'</small><strong>'+esc(profile.displayName || player.name.trim())+'</strong></figcaption></figure>');
+    }
   });
 }
 const esc = (value) =>
@@ -316,7 +319,21 @@ async function openMap(id, quiet = false) {
   }
   try {
     const data = await get("game/" + encodeURIComponent(id));
-    if (ticket === epoch) renderGame(data);
+    if (ticket === epoch) {
+      renderGame(data);
+      if (!quiet && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const cards = $("analysis").querySelectorAll(".pick");
+        cards.forEach((card,index) => card.animate(
+          [{opacity:0, transform:"translateY(9px)"},{opacity:1, transform:"translateY(0)"}],
+          {duration:280, delay:(index % 5)*38, fill:"backwards", easing:"ease-out"}
+        ));
+        const curve = $("analysis").querySelector(".chart polyline");
+        if (curve) {
+          curve.setAttribute("pathLength","1");
+          curve.animate([{strokeDasharray:"1",strokeDashoffset:1},{strokeDasharray:"1",strokeDashoffset:0}],{duration:650,easing:"ease-out"});
+        }
+      }
+    }
   } catch (err) {
     if (ticket === epoch) {
       $("analysis").textContent = err.message;
@@ -431,7 +448,7 @@ $("analysis").addEventListener("click", e => {
   const photo = portrait(player.name), art = championArt(player.champion);
   $("sheet-content").innerHTML = '<div class="sheet-hero">'+(art?'<img class="sheet-art" src="'+esc(art)+'" alt="">':'')+
     (photo?'<img class="sheet-photo" src="'+esc(photo)+'" alt="'+esc(player.name)+'">':'')+
-    '<div><small>'+esc(team.name)+'</small><h2 id="sheet-name">'+esc(player.name.trim())+'</h2><strong>'+esc(championName(player.champion))+'</strong></div></div>'+
+    '<div><small>'+esc(team.name)+'</small><h2 id="sheet-name">'+esc(catalog.players[player.name.trim()]?.displayName || player.name.trim())+'</h2><span class="real-name">'+esc(catalog.players[player.name.trim()]?.fullName || '')+'</span><strong>'+esc(championName(player.champion))+'</strong></div></div>'+
     '<div class="sheet-stats">'+[["Abates",player.kills],["Mortes",player.deaths],["Assistências",player.assists],["Dano",player.damage],["Ouro",player.gold],["CS",player.cs]].map(([k,v])=>metric(k,fmt(v))).join('')+'</div>';
   $("player-sheet").showModal();
 });

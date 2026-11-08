@@ -541,3 +541,48 @@ header { background:#0a1118; }
 .sheet-hero div{background:linear-gradient(90deg,#0c131ce6,transparent);padding:8px 16px 8px 0}
 .sheet-hero h2{font-size:2.2rem;line-height:1.05}.sheet-hero strong{color:var(--gold)}
 .sheet-stats{padding:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("/fonts/BarlowCondensed-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+}
+:root { --display: "Barlow Condensed", "Arial Narrow", sans-serif; }
+.hero h1, .scoreline, .star figcaption strong, #sheet-name, .pick strong {
+  font-family: var(--display); font-weight: 700; font-style: italic;
+}
+.hero h1 {font-size:clamp(4.5rem,9.5vw,9.8rem);letter-spacing:-.035em;text-shadow:0 6px 32px #0a132944;}
+.hero-inner {min-height:clamp(220px,21vw,320px);}
+.scoreline {font-size:clamp(2.2rem,4.5vw,4.3rem);letter-spacing:-.035em;}
+.star figcaption {display:flex;align-items:baseline;justify-content:center;gap:6px;background:linear-gradient(transparent,#080f18f0 70%);padding-top:26px;}
+.star figcaption small {font:700 .64rem/1 sans-serif;letter-spacing:.13em;color:#bfdde5;}
+.star-1 figcaption small {color:#f4c3cd;}
+.star figcaption strong {font-size:clamp(1.1rem,2vw,1.95rem);line-height:1;letter-spacing:.015em;}
+.pick strong {font-size:clamp(1rem,1.55vw,1.55rem);line-height:.98;text-shadow:0 1px 5px #091018;}
+.pick small {margin-top:3px;}
+.sheet-hero {height:clamp(245px,39vh,330px);}
+.sheet-hero div {max-width:64%;background:linear-gradient(90deg,#0b1521e8,#0b152185,transparent);}
+#sheet-name {font-size:clamp(3.1rem,7vw,5.1rem);line-height:.92;letter-spacing:-.025em;margin:5px 0;}
+.real-name {display:block;color:#e1e5e8;font-size:.9rem;margin-bottom:10px;}
+.hero-links a, .maps button, .event, .pick, .record-tile, .star img {transition:transform .22s ease,border-color .2s ease,background-color .2s ease;}
+@media (hover:hover) {
+ .hero-links a:hover,.maps button:hover,.record-tile:hover{transform:translateY(-2px);}
+ .pick:hover {transform:translateY(-4px);border-color:var(--gold);}
+ .pick:hover img {transform:scale(1.09);}
+ .star:hover img {transform:scale(1.035);}
+}
+@keyframes appear-up {from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)}}
+@keyframes stage-light {from{opacity:.72;transform:scale(1.035)} to{opacity:1;transform:scale(1)}}
+@keyframes backdrop-in {from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:no-preference) {
+ .hero::before {animation:stage-light 1.45s ease-out both;}
+ .hero-copy > * {animation:appear-up .55s ease-out backwards;}
+ .hero-copy h1 {animation-delay:.07s;}.hero-links {animation-delay:.14s;}
+ #player-sheet[open] {animation:appear-up .27s ease-out;}
+ #player-sheet[open]::backdrop {animation:backdrop-in .24s ease-out;}
+ #player-sheet[open] .sheet-photo {animation:appear-up .38s ease-out;}
+ #player-sheet[open] .sheet-stats .metric {animation:appear-up .35s .07s ease-out backwards;}
+}
+@media(max-width:500px){.hero-inner{min-height:200px}.pick strong{font-size:.95rem}.star figcaption{flex-direction:column;align-items:center;gap:2px}.star figcaption small{font-size:.56rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
